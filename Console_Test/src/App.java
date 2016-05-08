@@ -77,7 +77,16 @@ public class App {
 //				System.out.println(Double.);
 //	Long.toBinaryString(i);
 //	Integer.toBinaryString(i);
-//	
+		
+	Object o = new Object();
+	Integer i = new Integer(45);
+//	Integer ii =  Integer.valueOf(45); Ефективно!
+	
+	o = i;
+//	instanceof
+//	агрегация
+	
+	
 	}
 	
 
