@@ -2,40 +2,43 @@ package ua.nure.kovtunets.Practice2;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class MyListImpl implements MyList {
-
+public class MyListImpl implements MyList, ListIterable {
 	private Object[] obj;
-	private int index;
 	private int size;
 	private static final int DEFAULT_CAPACITY = 10;
 
 	public MyListImpl() {
-		obj = new Object[DEFAULT_CAPACITY]; // пояснить
+		obj = new Object[DEFAULT_CAPACITY];
 	}
 
 	@Override
 	public void add(Object e) {
-		if (index == obj.length) {
+
+		if (size == obj.length) {
 			growArray();
 
 		}
-		obj[index] = e;
-		index++;
+		obj[size] = e;
+
 		size++;
 
 	}
 
 	@Override
 	public void clear() {
+
 		for (int i = 0; i < size; i++)
 			obj[i] = null;
 
 		size = 0;
+
 	}
 
 	@Override
 	public boolean remove(Object o) {
+
 		if (o == null) {
 			for (int index = 0; index < size; index++)
 				if (obj[index] == null) {
@@ -50,7 +53,6 @@ public class MyListImpl implements MyList {
 				}
 		}
 		return false;
-
 	}
 
 	@Override
@@ -60,6 +62,7 @@ public class MyListImpl implements MyList {
 
 	@Override
 	public int size() {
+
 		return size;
 	}
 
@@ -76,10 +79,12 @@ public class MyListImpl implements MyList {
 		}
 
 		return false;
+
 	}
 
 	@Override
 	public boolean containsAll(MyList c) {
+
 		for (Object o : c.toArray()) {
 			if (!this.contains(o)) {
 				return false;
@@ -89,67 +94,99 @@ public class MyListImpl implements MyList {
 	}
 
 	private void growArray() {
-		Object[] newArray = (Object[]) new Integer[(obj.length * 3) / 2 + 1];
-		System.arraycopy(obj, 0, newArray, 0, index - 1);
+		Object[] newArray = new Object[(obj.length * 3) / 2 + 1];
+		System.arraycopy(obj, 0, newArray, 0, size);
 		obj = newArray;
 	}
 
 	private void fastRemove(int index) {
-		int numMoved = size - index - 1;
+		int numMoved = size - index;
 		if (numMoved > 0)
 			System.arraycopy(obj, index + 1, obj, index, numMoved);
-		obj[--size] = null; // clear to let GC do its work
+		obj[--size] = null;
 	}
 
 	@Override
 	public String toString() {
-
 		StringBuffer stringList = new StringBuffer();
-		if (this.size() == 0) {
+		if (size() == 0) {
 			return new String("Emty list");
 		}
-		for (Object o : this.toArray()) {
-			stringList.append(o.toString());
-			stringList.append("\n");
+		for (Object o : toArray()) {
+			stringList.append(o + "\n");
 		}
-		// stringList.setLength(stringList.length() - 1);
+
 		return stringList.toString();
 	}
 
 	@Override
 	public Iterator<Object> iterator() {
-		// TODO Auto-generated method stub
+
 		return new IteratorImpl();
 	}
 
+	@Override
+	public ListIterator listIterator() {
+
+		return new ListIteratorImpl();
+	}
+
 	private class IteratorImpl implements Iterator<Object> {
-
-		private int currentIndex = 0;
-
+	
+		protected int currentIndex = 0;
+		protected boolean accessToChange = false;
+	
 		@Override
 		public boolean hasNext() {
-
-			return currentIndex < size && obj[currentIndex] != null;
+	
+			return currentIndex < size;
 		}
-
+	
 		@Override
 		public Object next() {
+			accessToChange = true;
 			return obj[currentIndex++];
 		}
-
+	
 		@Override
 		public void remove() {
-
-			if (obj[currentIndex] != null) {
+	
+			if (currentIndex != 0 && accessToChange) { 
 				MyListImpl.this.remove(obj[currentIndex]);
-				obj[currentIndex] = null;
-
+				accessToChange = false;
 			}
-
+	
 			else {
 				throw new IllegalStateException();
 			}
 		}
+	}
+
+	private class ListIteratorImpl extends IteratorImpl implements ListIterator {
+
+		@Override
+		public boolean hasPrevious() {
+			if (currentIndex != 0)
+				return true;
+			return false;
+		}
+
+		@Override
+		public Object previus() {
+			if (currentIndex != 0) {
+				accessToChange = true;
+				return obj[--currentIndex];
+			}
+			throw new NoSuchElementException();
+		}
+
+		@Override
+		public void set(Object e) {
+			if (currentIndex != 0 && accessToChange == true)
+				obj[currentIndex] = e;
+			accessToChange = false;
+		}
+
 	}
 
 }

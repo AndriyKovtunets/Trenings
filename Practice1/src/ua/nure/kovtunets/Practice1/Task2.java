@@ -3,13 +3,15 @@ package ua.nure.kovtunets.Practice1;
 public class Task2 {
 
 	public static void main(String[] args) {
-		if (args.length != 2)
-			System.out.println("Pls enter 2 numbers");
-		else
+		if (getValidation(args) == false)
+			;
+		else {
+
 			System.out.println(Double.parseDouble(args[0]) + Double.parseDouble(args[1]));
+		}
 
 	}
-	
+
 	public static boolean getValidation(String[] args) {
 
 		final short minRange = 48; // range encodings number for ASCI table
@@ -32,8 +34,6 @@ public class Task2 {
 			System.out.println("Pleas enter two numbers");
 			return false;
 		}
-
-		
 
 		return true;
 	}

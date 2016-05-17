@@ -1,6 +1,6 @@
 package ua.nure.kovtunets.Practice2;
 
-public interface MyList extends Iterable<Object>  {
+public interface MyList extends Iterable<Object> {
 
 	void add(Object e);
 

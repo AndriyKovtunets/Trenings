@@ -24,6 +24,14 @@ public class Main {
 		// у класса Person нет метода getBank(), поэтому приводим к классу Client
 		String bank = ((Client)cl).getBank(); 
 		
+		int[] mas = {1, 2, 3, 4, 5};
+		int[] mas2 = {8, 9,8,8,8};
+		
+		System.arraycopy(mas, 3, mas, 0, 2);
+		for(int i=0; i< mas.length; i++)System.out.println(mas[i]);
+//		for(int i: mas3){System.out.println(mas3[i]);}
+		
+		
 	}
 
 }
