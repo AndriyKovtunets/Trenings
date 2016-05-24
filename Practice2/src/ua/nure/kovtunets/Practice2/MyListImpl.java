@@ -28,11 +28,7 @@ public class MyListImpl implements MyList, ListIterable {
 
 	@Override
 	public void clear() {
-
-		for (int i = 0; i < size; i++)
-			obj[i] = null;
-
-		size = 0;
+		Arrays.fill(obj, null);
 
 	}
 
@@ -132,30 +128,30 @@ public class MyListImpl implements MyList, ListIterable {
 	}
 
 	private class IteratorImpl implements Iterator<Object> {
-	
+
 		protected int currentIndex = 0;
 		protected boolean accessToChange = false;
-	
+
 		@Override
 		public boolean hasNext() {
-	
+
 			return currentIndex < size;
 		}
-	
+
 		@Override
 		public Object next() {
 			accessToChange = true;
 			return obj[currentIndex++];
 		}
-	
+
 		@Override
 		public void remove() {
-	
-			if (currentIndex != 0 && accessToChange) { 
+
+			if (currentIndex != 0 && accessToChange) {
 				MyListImpl.this.remove(obj[currentIndex]);
 				accessToChange = false;
 			}
-	
+
 			else {
 				throw new IllegalStateException();
 			}
